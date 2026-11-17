@@ -28,6 +28,9 @@ table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;colo
 footer{max-width:1080px;margin:-24px auto 0;padding:0 18px 30px;color:#8a968e;font-size:11px}
 @media(max-width:760px){main{grid-template-columns:1fr;margin-top:16px;padding:0 12px 36px;gap:13px}.panel{padding:18px;border-radius:15px}header{padding:18px 18px 23px}.summary strong{font-size:21px}}
 @media(max-width:380px){.grid2{grid-template-columns:1fr}.summary{align-items:flex-start;flex-direction:column}}
+
+.costbox{background:#f8faf5;border:1px solid var(--line);border-radius:14px;padding:15px}.costgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.costmetric{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px}.costmetric small{display:block;color:var(--muted);font-size:11px}.costmetric strong{display:block;color:var(--green);font-size:20px;font-variant-numeric:tabular-nums}.priceinput{width:92px;max-width:100%;padding:7px;border:1px solid #d9e0d7;border-radius:8px;text-align:right;font:inherit;font-size:13px}.costcontrols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.costcontrols label{font-size:11px;color:var(--muted);font-weight:700}.costcontrols input,.costcontrols select{display:block;width:100%;margin-top:4px}.pricehero{background:#edf4e5;border-radius:13px;padding:14px}.pricehero strong{font-size:27px;color:var(--green)}.pricehero small{display:block;color:var(--muted);font-size:11px}.sourcehint{font-size:10px;color:var(--muted);line-height:1.55}.editable-table td:last-child{text-align:right}
+@media(max-width:380px){.costgrid,.costcontrols{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -51,7 +54,7 @@ footer{max-width:1080px;margin:-24px auto 0;padding:0 18px 30px;color:#8a968e;fo
 <div class="deadline"><div class="eyebrow">最も早い発注締切</div><strong id="deadline">日付を選択してください</strong><p id="deadlineNote">食材ごとのリードタイムを考慮した目安です。</p></div>
 <div><div class="sectionhead"><h3>食材ごとの仕込み量</h3><span id="servings">20名分・予備5%</span></div>
 <div class="tablewrap"><table><thead><tr><th>食材</th><th>1名あたり</th><th>必要量</th></tr></thead><tbody id="ingredientRows"></tbody></table></div><p class="note">※ 数量は一般的な宴会メニューを想定した概算です。実際のレシピ・歩留まり・納品単位に合わせて調整してください。</p></div>
-<div><div class="sectionhead"><h3>卸への発注締切</h3><span>納品日から逆算</span></div><div class="tablewrap"><table><thead><tr><th>仕入れ品目</th><th>リードタイム</th><th>発注締切</th></tr></thead><tbody id="deadlineRows"></tbody></table></div></div>
+<div><div class="sectionhead"><h3>卸への発注締切</h3><span>納品日から逆算</span></div><div class="tablewrap"><table><thead><tr><th>仕入れ品目</th><th>リードタイム</th><th>発注締切</th></tr></thead><tbody id="deadlineRows"></tbody></table></div></div><div class="costbox"><div class="sectionhead"><h3>仕込み費用・コース料金の目安</h3><span>相場ベース／編集可能</span></div><div class="costgrid"><div class="costmetric"><small>食材仕入れ費（合計）</small><strong id="foodTotal">—</strong></div><div class="costmetric"><small>仕込み人件費（目安）</small><strong id="laborTotal">—</strong></div><div class="costmetric"><small>仕込み関連費（食材＋人件費＋諸経費）</small><strong id="prepTotal">—</strong></div><div class="costmetric"><small>お客様1名あたりの食材原価</small><strong id="foodPer">—</strong></div></div><div class="pricehero" style="margin-top:12px"><small>おすすめコース料金（税込・1名）</small><strong id="suggestPrice">—</strong><small id="priceExplain">食材原価率の目標から逆算した参考価格です。</small></div><div class="costcontrols"><label>目標食材原価率<select id="targetRate"><option value="0.28">28%（利益重視）</option><option value="0.30" selected>30%（標準）</option><option value="0.33">33%（満足度重視）</option><option value="0.35">35%（高原価設定）</option><option value="0.38">38%</option></select></label><label>仕込み時給（円）<input id="hourlyWage" type="number" min="0" step="50" value="1300"></label><label>仕込み時間（1名あたり・分）<input id="prepMinutes" type="number" min="0" step="1" value="5"></label><label>諸経費率（食材費に対して）<select id="overheadRate"><option value="0.03">3%</option><option value="0.05" selected>5%</option><option value="0.08">8%</option><option value="0.10">10%</option></select></label></div><div class="sectionhead"><h3>食材の参考仕入単価</h3><span>円／表示単位</span></div><div class="tablewrap"><table class="editable-table"><thead><tr><th>食材</th><th>単位</th><th>参考単価</th></tr></thead><tbody id="priceRows"></tbody></table></div><p class="sourcehint">鶏もも肉の初期値は農林水産省公表の2026年10月・東京卸売平均（852円/kg）を参考にしています。牛肉・その他食材は業務用価格帯等をもとにした概算値です。<a href="https://www.maff.go.jp/j/chikusan/shokuniku/lin/attach/pdf/index-610.pdf" target="_blank" rel="noopener">農水省・畜産物卸売価格</a> ／ <a href="https://www.jc-grp.com/column/vnw-oroshi/" target="_blank" rel="noopener">業務用食肉価格の参考レンジ</a>。実際の卸見積り・産地・等級・歩留まりで調整してください。市場価格の自動取得は行いません。コース料金は食材原価率からの逆算値で、飲み放題・税・サービス料などは別途確認してください。</p></div>
 <div class="actions"><button class="secondary" id="copy">リストをコピー</button><button class="secondary" id="print">印刷する</button></div><div class="toast" id="toast" role="status"></div>
 </section>
 </main>
@@ -63,6 +66,35 @@ const courses={
  light:{name:"カジュアルコース",items:[["鶏もも肉",90,"g","肉類",2],["刺身盛り合わせ",60,"g","鮮魚",2],["野菜（サラダ等）",140,"g","青果",1],["豆腐",60,"g","日配品",1],["米（生米）",70,"g","米穀",2],["デザート",1,"個","日配品",1]]}
 };
 const $=id=>document.getElementById(id);
+const priceDefaults={"鶏もも肉":852,"刺身盛り合わせ":2500,"えび":55,"野菜（鍋・付け合わせ）":450,"野菜（サラダ等）":450,"季節野菜":500,"豆腐":250,"米（生米）":650,"デザート":120,"牛肉":1800,"茶碗蒸し":90};
+const yen=n=>"¥"+Math.round(n).toLocaleString("ja-JP");
+const unitLabel=(unit)=>unit==="g"?"kg換算":unit==="尾"?"尾":"個";
+function buildPriceRows(course){
+ const saved={};$("priceRows").querySelectorAll("input").forEach(el=>saved[el.dataset.food]=el.value);
+ const names=[...new Set(course.items.map(x=>x[0]))];
+ $("priceRows").innerHTML=names.map(name=>{const item=course.items.find(x=>x[0]===name), unit=item[2], base=priceDefaults[name]??300; const unitPrice=saved[name]!==undefined?saved[name]:base;
+ return '<tr><td>'+name+'</td><td>'+(unit==="g"?"円/kg":unit==="尾"?"円/尾":"円/個")+'</td><td><input class="priceinput" type="number" min="0" step="1" data-food="'+name+'" value="'+Math.round(unitPrice)+'" aria-label="'+name+'の仕入単価"></td></tr>'}).join("");
+ $("priceRows").querySelectorAll("input").forEach(el=>el.addEventListener("input",calculateCosts));
+}
+function calculateCosts(){
+ const people=+$("people").value, course=courses[document.querySelector('[name="course"]:checked').value], factor=people*(1+ +$("buffer").value);
+ let food=0;
+ course.items.forEach(([name,per,unit])=>{
+  const input=$("priceRows").querySelector('[data-food="'+name+'"]');
+  const price=input?Math.max(0,+input.value||0):0;
+  const amount=per*factor;
+  food+=unit==="g"?(amount/1000)*price:amount*price;
+ });
+ const wage=Math.max(0,+$("hourlyWage").value||0), mins=Math.max(0,+$("prepMinutes").value||0);
+ const labor=people*mins/60*wage, overhead=food*(+$("overheadRate").value);
+ const prep=food+labor+overhead, perFood=food/people, target=+$("targetRate").value;
+ const priceExTax=perFood/target;
+ const suggested=Math.ceil((priceExTax*1.1)/100)*100;
+ $("foodTotal").textContent=yen(food);$("laborTotal").textContent=yen(labor);
+ $("prepTotal").textContent=yen(prep);$("foodPer").textContent=yen(perFood);
+ $("suggestPrice").textContent=yen(suggested);
+ $("priceExplain").textContent="食材原価率 "+Math.round(target*100)+"% を目標に逆算（税抜 "+yen(priceExTax)+" ／税込 "+yen(suggested)+"）。";
+}
 const fmt=n=>Number.isInteger(n)?n.toLocaleString("ja-JP"):n.toLocaleString("ja-JP",{maximumFractionDigits:1});
 const dateFmt=d=>d.toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric",weekday:"short"});
 function dateFromInput(v){if(!v)return null;const [y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d)}
@@ -78,6 +110,7 @@ function calculate(){
   if(!deadlines.some(x=>x.group===group))deadlines.push({group,days:days+remote});
  });
  $("ingredientRows").innerHTML=rows;
+ buildPriceRows(course);calculateCosts();
  const units=course.items.length;
  $("total").textContent=units+"品目";
  if(!event){$("deadline").textContent="日付を選択してください";$("deadlineNote").textContent="宴会・納品希望日を入力すると締切を表示します。";$("deadlineRows").innerHTML="";return}
@@ -89,6 +122,7 @@ function calculate(){
  $("deadlineRows").innerHTML=computed.map(x=>'<tr><td>'+x.group+'</td><td>'+x.days+'日前</td><td>'+dateFmt(x.date)+'</td></tr>').join("");
 }
 $("people").addEventListener("input",calculate);
+["targetRate","hourlyWage","prepMinutes","overheadRate"].forEach(id=>$(id).addEventListener("input",calculateCosts));
 document.querySelectorAll('[name="course"],#buffer,#supplier,#eventDate').forEach(el=>el.addEventListener("change",calculate));
 $("calc").addEventListener("click",()=>{calculate();$("toast").textContent="最新の条件で計算しました。"});
 $("copy").addEventListener("click",async()=>{
