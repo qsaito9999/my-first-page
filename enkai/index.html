@@ -70,8 +70,9 @@ const priceDefaults={"鶏もも肉":650,"刺身盛り合わせ":2500,"えび":55
 const yen=n=>"¥"+Math.round(n).toLocaleString("ja-JP");
 const unitLabel=(unit)=>unit==="g"?"kg換算":unit==="尾"?"尾":"個";
 function buildPriceRows(course){
+ const saved={};$("priceRows").querySelectorAll("input").forEach(el=>saved[el.dataset.food]=el.value);
  const names=[...new Set(course.items.map(x=>x[0]))];
- $("priceRows").innerHTML=names.map(name=>{const item=course.items.find(x=>x[0]===name), unit=item[2], base=priceDefaults[name]??300; const unitPrice=unit==="g"?base/1000:base;
+ $("priceRows").innerHTML=names.map(name=>{const item=course.items.find(x=>x[0]===name), unit=item[2], base=priceDefaults[name]??300; const unitPrice=saved[name]!==undefined?saved[name]:base;
  return '<tr><td>'+name+'</td><td>'+(unit==="g"?"円/kg":unit==="尾"?"円/尾":"円/個")+'</td><td><input class="priceinput" type="number" min="0" step="1" data-food="'+name+'" value="'+Math.round(unitPrice)+'" aria-label="'+name+'の仕入単価"></td></tr>'}).join("");
  $("priceRows").querySelectorAll("input").forEach(el=>el.addEventListener("input",calculateCosts));
 }
