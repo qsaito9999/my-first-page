@@ -88,11 +88,12 @@ function calculateCosts(){
  const wage=Math.max(0,+$("hourlyWage").value||0), mins=Math.max(0,+$("prepMinutes").value||0);
  const labor=people*mins/60*wage, overhead=food*(+$("overheadRate").value);
  const prep=food+labor+overhead, perFood=food/people, target=+$("targetRate").value;
- const suggested=Math.ceil((perFood/target)/100)*100;
+ const priceExTax=perFood/target;
+ const suggested=Math.ceil((priceExTax*1.1)/100)*100;
  $("foodTotal").textContent=yen(food);$("laborTotal").textContent=yen(labor);
  $("prepTotal").textContent=yen(prep);$("foodPer").textContent=yen(perFood);
  $("suggestPrice").textContent=yen(suggested);
- $("priceExplain").textContent="食材原価率 "+Math.round(target*100)+"% を目標に逆算（税抜 "+yen(suggested/1.1)+" ／税込 "+yen(suggested)+"）。";
+ $("priceExplain").textContent="食材原価率 "+Math.round(target*100)+"% を目標に逆算（税抜 "+yen(priceExTax)+" ／税込 "+yen(suggested)+"）。";
 }
 const fmt=n=>Number.isInteger(n)?n.toLocaleString("ja-JP"):n.toLocaleString("ja-JP",{maximumFractionDigits:1});
 const dateFmt=d=>d.toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric",weekday:"short"});
